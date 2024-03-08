@@ -1,0 +1,21 @@
+{
+    "short_name": "DoTv",
+    "name": "DoTv",
+    "icons": [
+        {
+            "src": "/dotv_banner.png",
+            "type": "image/png",
+            "sizes": "1432x727"
+        },
+        {
+            "src": "/favicon.svg",
+            "type": "image/svg",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "https://deyvidandrades.github.io/DoTv/index.html",
+    "background_color": "#060307",
+    "display": "standalone",
+    "theme_color": "#773e84",
+    "description": "Tente acertar o nome!"
+}
