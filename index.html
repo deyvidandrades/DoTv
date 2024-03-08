@@ -82,12 +82,7 @@
                     type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Países
             </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-5" id="pills-contact-tab" data-bs-toggle="pill"
-                    data-bs-target="#pills-contact"
-                    type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Canais
-            </button>
-        </li>
+
         <li class="nav-item" role="presentation">
             <button class="nav-link rounded-5" id="pills-disabled-tab" data-bs-toggle="pill"
                     data-bs-target="#pills-disabled"
@@ -101,6 +96,10 @@
     <div class="tab-content my-5" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
              tabindex="0">
+
+            <div class="col">
+                <h5 id="pais_nome" class="lead">🇧🇷 BRAZIL</h5>
+            </div>
 
             <div class="" id="player">
                 <video id="my-video" width=960 height=540 class="video-js vjs-default-skin w-100 rounded-5" controls
@@ -118,12 +117,14 @@
                     <!--    <button type="button" class="btn btn-primary rounded-5">Adicionar aos favoritos</button>-->
 
                     <!--</div>-->
-
                 </div>
             </div>
 
             <hr>
-            <div id="lista_recomendacoes" class=""></div>
+            <div id="lista_recomendacoes" class="mb-5"></div>
+
+            <div class="" id="lista_categorias"></div>
+
 
         </div>
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
@@ -131,11 +132,7 @@
 
             <div class="" id="lista_paises"></div>
         </div>
-        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
-             tabindex="0">
 
-            <div class="" id="lista_categorias"></div>
-        </div>
         <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab"
              tabindex="0">
             <h5 class="lead my-5">Sobre</h5>

@@ -61,10 +61,16 @@ function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
 
 function init(regions, countries, categories, channels, streams) {
 
+    selected_country = localStorage.getItem("selected_country")
+
+    if (selected_country === null)
+        selected_country = "BR"
+
     loadCountries(regions, countries)
     loadChannels(channels, categories, streams).then(r => {
         if (channel_list.length > 0)
             loadRecomended()
+
         loading(false)
     })
 }
@@ -89,15 +95,16 @@ function loadCountries(regions, countries) {
                     </div>
                     `
                 }
+
+                if (country["code"] === selected_country)
+                    document.getElementById("pais_nome").innerText = `
+                    ${country["flag"]} ${country["name"]}
+                    `
             })
 
             lista_paises.innerHTML += `${lista_paises_html}</div></div>`
         }
     })
-
-    selected_country = localStorage.getItem("selected_country")
-    if (selected_country === null)
-        changeCountry("BR")
 }
 
 async function loadChannels(channels, categories, streams) {
@@ -214,7 +221,7 @@ function loadRecomended() {
     lista_recomendacoes.innerHTML = ""
 
     let lista_recomendacoes_html = `<div class="mt-5"><p class="lead">Recomendados</p><div class="row row-fluid">`
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 6; i++) {
         let index = Math.floor(Math.random() * (channel_list.length - 1))
         let channel = channel_list[index]
 
@@ -268,6 +275,8 @@ function loadChannel(channel) {
     //video_player.on('error', player_error_listener(channel))
     video_player.load()
     video_player.play()
+
+    window.scrollTo({top: 0, behavior: 'smooth'})
 }
 
 function checkVideoSource(url) {
