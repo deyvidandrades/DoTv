@@ -121,7 +121,7 @@ async function loadChannels(channels, categories, streams) {
 
     let saved_channels = JSON.parse(localStorage.getItem('working_channels'))
 
-    if (saved_channels != null && saved_channels[selected_country] === undefined) {
+    if (saved_channels == null || saved_channels[selected_country] === undefined) {
         loading(true, "Testando canais")
         let working_channels = []
         let index = 0
