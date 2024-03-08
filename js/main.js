@@ -51,7 +51,7 @@ let video_player = videojs('my-video', {
 fetchData().then(r => {
 })
 
-function loading(is_loading, titulo="CARREGANDO INFORMAÇÕES", info = "") {
+function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
     let loading = document.getElementById("loading")
     document.getElementById("titulo_loading").innerText = titulo
     document.getElementById("info_loading").innerText = info
@@ -93,6 +93,10 @@ function loadCountries(regions, countries) {
             lista_paises.innerHTML += `${lista_paises_html}</div></div>`
         }
     })
+
+    selected_country = localStorage.getItem("selected_country")
+    if (selected_country === undefined)
+        changeCountry("BR")
 }
 
 async function loadChannels(channels, categories, streams) {
@@ -229,6 +233,7 @@ function loadRecomended() {
 
 function changeCountry(country_id) {
     selected_country = country_id
+    localStorage.setItem("selected_country", selected_country)
     fetchData(country_id).then(r => {
     })
 }
