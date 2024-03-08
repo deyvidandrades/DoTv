@@ -16,13 +16,9 @@ Note que ao selecionar um país, o site analisará os canais caso seja a primeir
 ## Licença
 Este projeto está licenciado com a MIT License - veja o arquivo [LICENSE] para mais detalhes.
 
-## Acknowledgements
-
-We would like to express our gratitude to the following:
-
--   **[IPTV ORG](https://github.com/iptv-org/iptv)**: Por disponibilizar a api com as listas atualizadas de canais IPTV.
 
 ## Tecnologias
 - JS
 - Bootstrap como biblioteca de ui
 - VideoJS
+- **[IPTV ORG](https://github.com/iptv-org/iptv)** como api com as listas atualizadas de canais IPTV
