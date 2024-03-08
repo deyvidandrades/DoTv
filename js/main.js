@@ -168,7 +168,12 @@ function exibir_lista_canais(categories, filtered_channels) {
     let lista_outros = []
     let canais_listados = []
     categories.forEach((category) => {
-        let lista_categorias_html = `<div class="mt-5"><p class="lead">${category["name"]}</p><div class="row row-fluid">`
+        let lista_categorias_html = `
+        <div class="mt-5"><p class="lead" data-bs-toggle="collapse" href="#category_${category["name"]}
+        " role="button" aria-expanded="true" aria-controls="category_${category["name"]}">${category["name"]}</p>
+        <div class="row row-fluid collapse show" id="category_${category["name"]}">
+        `
+
         let has_channel = false
         filtered_channels.forEach((channel) => {
 
@@ -262,10 +267,6 @@ function changeChannel(channel_id) {
             loadChannel(channel)
         }
     })
-}
-
-function player_error_listener(channel) {
-
 }
 
 function loadChannel(channel) {
