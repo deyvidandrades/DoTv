@@ -95,7 +95,7 @@ function loadCountries(regions, countries) {
     })
 
     selected_country = localStorage.getItem("selected_country")
-    if (selected_country === undefined)
+    if (selected_country === null)
         changeCountry("BR")
 }
 
