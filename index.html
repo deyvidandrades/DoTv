@@ -56,6 +56,18 @@
 </head>
 <body class="container p-5">
 
+<div id="loading" class="overlay">
+    <div class="progress-container">
+        <div class="progress">
+            <div class="progress-bar bg-secondary progress-bar-striped progress-bar-animated" role="progressbar"
+                 aria-label="Animated striped example"
+                 aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+        </div>
+        <p id="titulo_loading" class="lead text-capitalize my-3">CARREGANDO INFORMAÇÕES</p>
+        <small id="info_loading" class="muted">sub</small>
+    </div>
+</div>
+
 <header class="d-flex justify-content-center fixed-top py-3">
     <ul class="nav nav-pills mb-3 p-1 bg-dark rounded-5" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
@@ -91,11 +103,12 @@
              tabindex="0">
 
             <div class="" id="player">
-                <video id="my-video" width=960 height=540 class="video-js vjs-default-skin w-100 rounded-5" controls>
+                <video id="my-video" width=960 height=540 class="video-js vjs-default-skin w-100 rounded-5" controls
+                       muted="muted">
                     <source src="" type="application/x-mpegURL">
                 </video>
                 <div class="mt-3 mb-5 d-flex justify-content-between">
-                    <div class="col-2">
+                    <div class="col-12 col-md-4 col-lg-2">
                         <img id="canal_capa" class="img mb-2" width="50" src="" alt="">
                         <h5 id="canal_nome" class="lead">CANAL</h5>
                         <p id="canal_categoria">Categoria</p>
@@ -187,7 +200,7 @@
         </a>
         ©
         <script type="text/javascript">document.write(new Date().getFullYear().toString())</script>
-        <label class="text-light fw-bold fs-5">DoTv</label> v1.0 <br>por <strong>@deyvidandrades</strong>
+        <label class="text-light fw-bold fs-5">DoTv</label> v1.1 <br>por <strong>@deyvidandrades</strong>
     </div>
 
 

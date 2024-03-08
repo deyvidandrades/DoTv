@@ -1,4 +1,6 @@
 const fetchData = async (country_id = "BR") => {
+
+    loading(true, "Carregando canais.")
     try {
         const responsesJSON = await Promise.all([
             fetch('https://iptv-org.github.io/api/regions.json'),
@@ -28,12 +30,12 @@ const fetchData = async (country_id = "BR") => {
                 })
 
                 init(regions, countries, categories, channels, streams)
-            }
-        )
+            })
     } catch (err) {
         throw err;
     }
 }
+
 
 let selected_country = 'BR'
 let channel_list = []
@@ -45,20 +47,25 @@ let video_player = videojs('my-video', {
     sources: []
 });
 
-video_player.on('error', function () {
-    console.log(video_player.error().message);
-});
 
 fetchData().then(r => {
 })
 
+function loading(is_loading, titulo="CARREGANDO INFORMAÇÕES", info = "") {
+    let loading = document.getElementById("loading")
+    document.getElementById("titulo_loading").innerText = titulo
+    document.getElementById("info_loading").innerText = info
+
+    loading.style.visibility = is_loading ? "visible" : loading.style.visibility = "hidden"
+}
 
 function init(regions, countries, categories, channels, streams) {
 
     loadCountries(regions, countries)
-    loadChannels(channels, categories, streams)
-    loadRecomended()
-
+    loadChannels(channels, categories, streams).then(r => {
+        loadRecomended()
+        loading(false)
+    })
 }
 
 function loadCountries(regions, countries) {
@@ -88,11 +95,9 @@ function loadCountries(regions, countries) {
     })
 }
 
-function loadChannels(channels, categories, streams) {
-    let lista_categorias = document.getElementById("lista_categorias")
+async function loadChannels(channels, categories, streams) {
     let filtered_channels = []
 
-    lista_categorias.innerHTML = ""
     channels.forEach((channel) => {
         if (channel["country"] === selected_country && channel["closed"] == null)
             streams.forEach(stream => {
@@ -105,8 +110,47 @@ function loadChannels(channels, categories, streams) {
                         "categories": channel["categories"],
                         "url": stream["url"]
                     })
+
             })
     })
+
+    let saved_channels = JSON.parse(localStorage.getItem('working_channels'))
+
+    if (saved_channels[selected_country] === undefined) {
+        loading(true, "Testando canais")
+        let working_channels = []
+        let index = 0
+        for (const channel of filtered_channels) {
+            await checkVideoSource(channel["url"]).then(is_working => {
+                loading(
+                    true,
+                    "Testando canais",
+                    `(${index}/${filtered_channels.length}) Canal adicionado: ${channel["name"]}`
+                )
+
+                working_channels.push(channel)
+            }).catch(error => {
+
+            })
+
+            index += 1
+        }
+        loading(false)
+
+        saved_channels[selected_country] = working_channels
+
+        localStorage.setItem('working_channels', JSON.stringify(saved_channels))
+
+        //console.log(working_channels)
+        exibir_lista_canais(categories, working_channels)
+    } else {
+        exibir_lista_canais(categories, saved_channels[selected_country])
+    }
+}
+
+function exibir_lista_canais(categories, filtered_channels) {
+    let lista_categorias = document.getElementById("lista_categorias")
+    lista_categorias.innerHTML = ""
 
     channel_list = filtered_channels
     let lista_outros = []
@@ -189,7 +233,6 @@ function changeCountry(country_id) {
     })
 }
 
-
 function changeChannel(channel_id) {
     let player = document.getElementById("my-video")
     let channel_name = document.getElementById("canal_nome")
@@ -199,16 +242,56 @@ function changeChannel(channel_id) {
 
     channel_list.forEach(channel => {
         if (channel["id"] === channel_id) {
-            //player.innerHTML = `<source src="${channel["url"]}" type="application/x-mpegURL"/>`
-            //videojs('my-video').play()
             channel_name.innerText = channel["name"]
             channel_category.innerText = `Categoria: ${channel["categories"]}`
             channel_capa.src = channel["logo"]
 
-            video_player.src({src: channel["url"], type: 'application/x-mpegURL'})
-            video_player.poster(channel["logo"])
-            video_player.load()
-            video_player.play()
+            loadChannel(channel)
         }
+    })
+}
+
+function player_error_listener(channel) {
+
+}
+
+function loadChannel(channel) {
+    video_player.src({src: channel["url"], type: 'application/x-mpegURL'})
+    video_player.poster(channel["logo"])
+
+    //video_player.on('error', player_error_listener(channel))
+    video_player.load()
+    video_player.play()
+}
+
+function checkVideoSource(url) {
+    return new Promise((resolve, reject) => {
+        let loadTimeout = setTimeout(() => {
+            video_player.off('loadedmetadata', loadedMetadataHandler);
+            video_player.off('error', errorHandler);
+            reject(false);
+        }, 10000)
+
+        const loadedMetadataHandler = () => {
+            clearTimeout(loadTimeout)
+            video_player.off('loadedmetadata', loadedMetadataHandler)
+            video_player.off('error', errorHandler)
+            resolve(true)
+        }
+
+        const errorHandler = () => {
+            clearTimeout(loadTimeout)
+            video_player.off('loadedmetadata', loadedMetadataHandler)
+            video_player.off('error', errorHandler)
+
+            reject(false)
+        }
+
+        video_player.on('error', errorHandler)
+        video_player.on('loadedmetadata', loadedMetadataHandler)
+
+        video_player.src(url)
+        video_player.load()
+        video_player.play()
     })
 }
