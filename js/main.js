@@ -63,7 +63,8 @@ function init(regions, countries, categories, channels, streams) {
 
     loadCountries(regions, countries)
     loadChannels(channels, categories, streams).then(r => {
-        loadRecomended()
+        if (channel_list.length > 0)
+            loadRecomended()
         loading(false)
     })
 }
@@ -120,7 +121,7 @@ async function loadChannels(channels, categories, streams) {
 
     let saved_channels = JSON.parse(localStorage.getItem('working_channels'))
 
-    if (saved_channels[selected_country] === undefined) {
+    if (saved_channels != null && saved_channels[selected_country] === undefined) {
         loading(true, "Testando canais")
         let working_channels = []
         let index = 0
