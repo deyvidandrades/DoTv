@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DoTV</title>
+    <link rel="icon" type="image" href="favicon.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body class="container p-5">
+
+<header class="d-flex justify-content-center fixed-top py-3">
+    <ul class="nav nav-pills mb-3 p-1 bg-dark rounded-5" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-5 active" id="pills-home-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-home"
+                    type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-5" id="pills-profile-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-profile"
+                    type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Países
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-5" id="pills-contact-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-contact"
+                    type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Canais
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link rounded-5" id="pills-disabled-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-disabled"
+                    type="button" role="tab" aria-controls="pills-disabled" aria-selected="false">Sobre
+            </button>
+        </li>
+    </ul>
+</header>
+<div class="mt-5">
+
+    <div class="tab-content my-5" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+             tabindex="0">
+
+            <div class="" id="player">
+                <video id="my-video" width=960 height=540 class="video-js vjs-default-skin w-100 rounded-5" controls>
+                    <source src="" type="application/x-mpegURL">
+                </video>
+                <div class="mt-3 mb-5 d-flex justify-content-between">
+                    <div class="col-2">
+                        <img id="canal_capa" class="img mb-2" width="50" src="" alt="">
+                        <h5 id="canal_nome" class="lead">CANAL</h5>
+                        <p id="canal_categoria">Categoria</p>
+
+                    </div>
+                    <!--<div class="col-2">-->
+                    <!--    <button type="button" class="btn btn-primary rounded-5">Adicionar aos favoritos</button>-->
+
+                    <!--</div>-->
+
+                </div>
+            </div>
+
+            <hr>
+            <div id="lista_recomendacoes" class=""></div>
+
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+             tabindex="0">
+
+            <div class="" id="lista_paises"></div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
+             tabindex="0">
+
+            <div class="" id="lista_categorias"></div>
+        </div>
+        <div class="tab-pane fade" id="pills-disabled" role="tabpanel" aria-labelledby="pills-disabled-tab"
+             tabindex="0">
+            <h5 class="lead my-5">Sobre</h5>
+            <p>
+                O <b>DoTv</b> foi idealizado em 2012, e teve seu protótipo desenvolvido em VB como aplicação para
+                desktop, porém essa versão se perdeu com o tempo. Em 2021 revisitei a ideia e desenvolvi um novo
+                protótipo, desta vez em Python e PyQt.
+            </p>
+            <p class="mb-5">
+                Numa segunda visita ao projeto, agora em 2024, decidi desenvolver a versão web e disponibilizar o código
+                fonte para que outros desenvolvedores possam contribuir.
+            </p>
+
+            <hr>
+            <h5 class="lead mt-5">Perguntas Frequentes (FAQ's)</h5>
+
+            <h5 class="mt-5">Os canais de IPTV são gratuitos?</h5>
+            <p>
+                Em nosso site, oferecemos acesso a canais abertos de IPTV do mundo todo, de forma gratuita e <b>sem
+                anúncios</b> no site. Isso é possível graças aos esforços dos membros da comunidade IPTV ORG, que
+                disponibilizam as listas de canis, que geralmente incluem canais de TV aberta, notícias, esportes e
+                entretenimento.
+            </p>
+
+            <h5 class="mt-5">Os canais de IPTV são transmitidos em alta definição (HD)?</h5>
+            <p>
+                A qualidade de transmissão dos canais de IPTV pode variar dependendo da fonte e da configuração do
+                canal. Alguns canais podem ser transmitidos em alta definição (HD), enquanto outros podem ter uma
+                qualidade de vídeo inferior.
+            </p>
+
+            <h5 class="mt-5">É legal assistir a canais de IPTV?</h5>
+            <p>
+                Assistir a canais de IPTV <b>abertos</b>, que são distribuídos livremente na internet, é legal na
+                maioria dos países. No entanto, é importante verificar as leis locais relacionadas à distribuição e uso
+                de conteúdo de TV online.
+            </p>
+
+            <h5 class="mt-5">Posso sugerir novos canais para serem adicionados ao serviço?</h5>
+            <p>
+                Sim, se houverem canais que você gostaria de ver em nosso serviço, você pode adicionar no github do IPTV
+                ORG, seguindo os passos disponíveis nessa página:
+                <a href="https://github.com/iptv-org/iptv/blob/master/CONTRIBUTING.md">Contributing Guide</a>
+            </p>
+
+            <h5 class="mt-5">Os canais são atualizados regularmente?</h5>
+            <p>
+                Sim, as listas de canais são mantidas pela própria comunidade. Nosso serviço sempre carrega as listas
+                mais recentes, então se algum canal não estiver funcionando no momento pode ser que ele seja atualizado
+                em breve.
+            </p>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5">
+    <div class="col mb-3">
+        <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
+            <img class="img" src="favicon.svg"/>
+        </a>
+        ©
+        <script type="text/javascript">document.write(new Date().getFullYear().toString())</script>
+        <label class="text-light fw-bold fs-5">DoTv</label> v1.0 <br>por <strong>@deyvidandrades</strong>
+    </div>
+
+
+    <div class="col mb-3">
+        <h5>Política DMCA</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <p class="small">O <b>DoTv</b> não hospeda nenhum arquivo de mídia (avi, mkv, mpg, mpeg, vob, wmv, flv,
+                    mp4, mov, m2v, divx, xvid, 3gp, webm, ogv, ogg) protegido por direitos autorais em nosso site.
+                </p>
+            </li>
+        </ul>
+    </div>
+    <div class="col mb-3">
+        <h5>‎ </h5>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <p class="small">Usamos listas de streaming de canais abertos mantidos pela comunidade do IPTV ORG. Por
+                    este motivo, não garantimos a funcionalidade de streams disponibilizados pela api.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col mb-3">
+        <h5>Código Aberto</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="https://github.com/iptv-org/iptv"
+                   class="btn bg-dark-subtle text-dark-emphasis px-2 rounded-5 text-start w-100"
+                   target="_null">
+                    <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32"
+                         data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+                        <path
+                            d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+                    </svg>
+                    GITHUB
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+
+                <p class="p-2 small">O <b>DoTv</b> é gratúito e de código aberto.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col mb-3">
+        <h5>Conteúdo & API</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="https://github.com/iptv-org/iptv"
+                   class="btn bg-info-subtle text-info-emphasis px-2 rounded-5 text-start w-100"
+                   target="_null">
+                    <img class="img" src="https://avatars.githubusercontent.com/u/55937028?s=48&v=4"/>
+                    IPTV ORG
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+
+                <p class="p-2 small">Todo o conteúdo nesse site é promovido pela IPTV ORG. A maior api de IPTV
+                    livre.</p>
+            </li>
+        </ul>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jmespath/0.16.0/jmespath.min.js"
+        integrity="sha512-w/sNKK/59oJUi6v+SjgfIijrkFN8Pfv5QFZSV4KvrNMJrlbVM3017ZGNCA2AwZ6PKJzTPxQaDs/TbPcVGnF+pQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
