@@ -63,10 +63,8 @@ function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
 }
 
 function init(regions, countries, categories, channels, streams) {
-
     loadCountries(regions, countries)
     loadChannels2(channels, streams)
-
 }
 
 function loadCountries(regions, countries) {
@@ -107,7 +105,6 @@ function loadChannels2(channels, streams) {
         if (channel["country"] === selected_country && channel["closed"] == null) {
             streams.forEach(stream => {
                 if (stream["id"] === channel["id"]) {
-                    console.log(selected_country)
                     filtered_channels.push({
                         "id": channel["id"],
                         "name": channel["name"],
