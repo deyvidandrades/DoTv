@@ -36,7 +36,6 @@ const fetchData = async (country_id = "BR") => {
     }
 }
 
-
 let selected_country = 'BR'
 let channel_list = []
 let video_player = videojs('my-video', {
@@ -46,7 +45,13 @@ let video_player = videojs('my-video', {
     sources: []
 });
 
-fetchData().then(r => {
+selected_country = localStorage.getItem("selected_country")
+if (selected_country === null) {
+    selected_country = "BR"
+    localStorage.setItem("selected_country", selected_country)
+}
+
+fetchData(selected_country).then(r => {
 })
 
 function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
@@ -58,12 +63,6 @@ function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
 }
 
 function init(regions, countries, categories, channels, streams) {
-    selected_country = localStorage.getItem("selected_country")
-
-    if (selected_country === null) {
-        selected_country = "BR"
-        localStorage.setItem("selected_country", selected_country)
-    }
 
     loadCountries(regions, countries)
     loadChannels2(channels, streams)
@@ -108,6 +107,7 @@ function loadChannels2(channels, streams) {
         if (channel["country"] === selected_country && channel["closed"] == null) {
             streams.forEach(stream => {
                 if (stream["id"] === channel["id"]) {
+                    console.log(selected_country)
                     filtered_channels.push({
                         "id": channel["id"],
                         "name": channel["name"],
