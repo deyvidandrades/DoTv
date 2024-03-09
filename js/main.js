@@ -39,14 +39,12 @@ const fetchData = async (country_id = "BR") => {
 
 let selected_country = 'BR'
 let channel_list = []
-
 let video_player = videojs('my-video', {
     controls: true,
     autoplay: false,
     log: false,
     sources: []
 });
-
 
 fetchData().then(r => {
 })
@@ -60,19 +58,14 @@ function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
 }
 
 function init(regions, countries, categories, channels, streams) {
-
     selected_country = localStorage.getItem("selected_country")
 
     if (selected_country === null)
         selected_country = "BR"
 
     loadCountries(regions, countries)
-    loadChannels(channels, categories, streams).then(r => {
-        if (channel_list.length > 0)
-            loadRecomended()
+    loadChannels2(channels, streams)
 
-        loading(false)
-    })
 }
 
 function loadCountries(regions, countries) {
@@ -107,141 +100,124 @@ function loadCountries(regions, countries) {
     })
 }
 
-async function loadChannels(channels, categories, streams) {
+function loadChannels2(channels, streams) {
     let filtered_channels = []
-
-    channels.forEach((channel) => {
-        if (channel["country"] === selected_country && channel["closed"] == null)
+    channels.forEach(channel => {
+        if (channel["country"] === selected_country && channel["closed"] == null) {
             streams.forEach(stream => {
-                if (stream["id"] === channel["id"])
+                if (stream["id"] === channel["id"]) {
                     filtered_channels.push({
                         "id": channel["id"],
                         "name": channel["name"],
                         "logo": channel["logo"],
                         "country": channel["country"],
-                        "categories": channel["categories"],
+                        "categories": channel["categories"].length === 0 ? ["general"] : channel["categories"],
                         "url": stream["url"]
                     })
-
+                }
             })
+        }
     })
 
+    testChannels2(filtered_channels).then(working_channels => {
+        let lista_categorias = []
+
+        working_channels.forEach(channel => {
+            if (!lista_categorias.includes(channel["categories"][0]))
+                lista_categorias.push(channel["categories"][0])
+        })
+
+        loadCategories(lista_categorias)
+        exibir_lista_canais2(working_channels)
+        loading(false)
+    })
+}
+
+async function testChannels2(channels) {
     let saved_channels = JSON.parse(localStorage.getItem('working_channels'))
+    let working_channels = []
+    let index = 0
 
     if (saved_channels == null || saved_channels[selected_country] === undefined) {
-        loading(true, "Testando canais")
-        let working_channels = []
-        let index = 0
-        for (const channel of filtered_channels) {
+        for (const channel of channels) {
             await checkVideoSource(channel["url"]).then(is_working => {
                 loading(
                     true,
                     "Testando canais",
-                    `(${index}/${filtered_channels.length}) Canal adicionado: ${channel["name"]}`
+                    `(${index}/${channels.length}) Canal adicionado: ${channel["name"]}`
                 )
 
-                working_channels.push(channel)
+                working_channels.push(channel["id"])
             }).catch(error => {
 
             })
 
             index += 1
         }
-        loading(false)
 
         saved_channels[selected_country] = working_channels
 
         localStorage.setItem('working_channels', JSON.stringify(saved_channels))
-
-        //console.log(working_channels)
-        exibir_lista_canais(categories, working_channels)
+        return saved_channels[selected_country]
     } else {
-        exibir_lista_canais(categories, saved_channels[selected_country])
+        let new_list = []
+        channels.forEach(channel => {
+            if (saved_channels[selected_country].includes(channel["id"]))
+                new_list.push(channel)
+        })
+
+        return new_list
     }
 }
 
-function exibir_lista_canais(categories, filtered_channels) {
-    let lista_categorias = document.getElementById("lista_categorias")
+function loadCategories(categories) {
+    categories.sort()
+
+    let lista_categorias = document.getElementById("tab-categorias")
+    let conteudo_categorias = document.getElementById("tabContent-categorias")
+
     lista_categorias.innerHTML = ""
+    conteudo_categorias.innerHTML = ""
 
-    channel_list = filtered_channels
-    let lista_outros = []
-    let canais_listados = []
-    categories.forEach((category) => {
+    categories.forEach((category, i) => {
         let lista_categorias_html = `
-        <div class="mt-5"><p class="lead" data-bs-toggle="collapse" href="#category_${category["name"]}
-        " role="button" aria-expanded="true" aria-controls="category_${category["name"]}">${category["name"]}</p>
-        <div class="row row-fluid collapse show" id="category_${category["name"]}">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-5 ${i === 0 ? "active" : ""}" id="tab-${category}" data-bs-toggle="pill"
+                    data-bs-target="#${category}" type="button" role="tab" aria-controls="${category}"
+                    aria-selected="true">
+                    ${category.toUpperCase()}
+                </button>
+            </li>
         `
-
-        let has_channel = false
-        filtered_channels.forEach((channel) => {
-
-            if (channel["categories"].includes(category["id"]) && !canais_listados.includes(channel["id"])) {
-                lista_categorias_html += `
-                    <div class="col-12 col-md-4 col-lg-2 p-2">
-                        <div class="btn btn-light px-3 py-4 text-start d-flex h-100" onclick="changeChannel('${channel["id"]}')">
-                            <div class="col-3 my-auto py-auto">
-                                <img src="${channel["logo"]}" class="img img-fluid" alt="${channel["name"]}"/>
-                            </div>
-                            <p class="ms-3 my-auto col">${channel["name"]}</hp>
-                        </div>
-                    </div>
-                    `
-                has_channel = true
-                canais_listados.push(channel["id"])
-            }
-
-            if (channel["categories"].length === 0 && !lista_outros.includes(channel) && !canais_listados.includes(channel["id"])) {
-                lista_outros.push(channel)
-            }
-        })
-
-
-        if (has_channel)
-            lista_categorias.innerHTML += `${lista_categorias_html}</div></div>`
-
+        lista_categorias.innerHTML += lista_categorias_html
     })
 
-    if (lista_outros.length > 0) {
-        let lista_categorias_html = `<div class="mt-5"><p class="lead">Outros</p><div class="row row-fluid">`
-        lista_outros.forEach(channel => {
-            lista_categorias_html += `
-                    <div class="col-12 col-md-4 col-lg-2 p-2">
-                        <div class="btn btn-light p-1 text-start d-flex h-100" onclick="changeChannel('${channel["id"]}')">
-                            <div class="col-3 m-3">
-                                <img src="${channel["logo"]}" class="img img-fluid" alt="${channel["name"]}"/>
-                            </div>
-                            <p class="my-auto col">${channel["name"]}</hp>
-                        </div>
-                    </div>
-                    `
-        })
-        lista_categorias.innerHTML += `${lista_categorias_html}</div></div>`
-    }
+    categories.forEach((category, i) => {
+        let lista_conteudo_categorias_html = `
+            <div class="tab-pane fade ${i === 0 ? "show active" : ""}" id="${category}" role="tabpanel"
+                aria-labelledby="${category}-tab" tabindex="${i}">
+                <div class="row row-fluid" id="lista-canais-${category}"></div>
+            </div>`
+
+        conteudo_categorias.innerHTML += lista_conteudo_categorias_html
+    })
 }
 
-function loadRecomended() {
-    let lista_recomendacoes = document.getElementById("lista_recomendacoes")
-    lista_recomendacoes.innerHTML = ""
+function exibir_lista_canais2(channels) {
+    channels.forEach(channel => {
+        let conteudo_categorias = document.getElementById(`lista-canais-${channel["categories"][0]}`)
 
-    let lista_recomendacoes_html = `<div class="mt-5"><p class="lead">Recomendados</p><div class="row row-fluid">`
-    for (let i = 0; i < 6; i++) {
-        let index = Math.floor(Math.random() * (channel_list.length - 1))
-        let channel = channel_list[index]
-
-        lista_recomendacoes_html += `
-                    <div class="col-12 col-md-4 col-lg-2 p-2">
-                        <div class="btn btn-light px-3 py-4 text-start d-flex h-100" onclick="changeChannel('${channel["id"]}')">
-                            <div class="col-3 my-auto py-auto">
-                                <img src="${channel["logo"]}" class="img img-fluid" alt="${channel["name"]}"/>
-                            </div>
-                            <p class="ms-3 my-auto col">${channel["name"]}</hp>
-                        </div>
+        conteudo_categorias.innerHTML += `
+            <div class="col-12 col-md-4 col-lg-2 p-2">
+                <div class="btn btn-light px-3 py-4 text-start d-flex h-100" onclick="changeChannel('${channel["id"]}')">
+                    <div class="col-3 my-auto py-auto">
+                        <img src="${channel["logo"]}" class="img img-fluid" alt="${channel["name"]}"/>
                     </div>
-                    `
-    }
-    lista_recomendacoes.innerHTML += `${lista_recomendacoes_html}</div></div>`
+                    <p class="ms-3 my-auto col">${channel["name"]}</hp>
+                </div>
+            </div>
+        `
+    })
 }
 
 function changeCountry(country_id) {
