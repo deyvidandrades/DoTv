@@ -60,8 +60,10 @@ function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
 function init(regions, countries, categories, channels, streams) {
     selected_country = localStorage.getItem("selected_country")
 
-    if (selected_country === null)
+    if (selected_country === null) {
         selected_country = "BR"
+        localStorage.setItem("selected_country", selected_country)
+    }
 
     loadCountries(regions, countries)
     loadChannels2(channels, streams)
@@ -129,6 +131,7 @@ function loadChannels2(channels, streams) {
 
         loadCategories(lista_categorias)
         exibir_lista_canais2(working_channels)
+        channel_list = working_channels
         loading(false)
     })
 }
