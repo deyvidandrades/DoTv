@@ -138,19 +138,20 @@ async function testChannels2(channels) {
     let working_channels = []
     let index = 0
 
+    loading(true, "Testando canais", ``)
     if (saved_channels == null || saved_channels[selected_country] === undefined) {
         for (const channel of channels) {
             await checkVideoSource(channel["url"]).then(is_working => {
-                loading(
-                    true,
-                    "Testando canais",
-                    `(${index}/${channels.length}) Canal adicionado: ${channel["name"]}`
-                )
-
                 working_channels.push(channel["id"])
             }).catch(error => {
 
             })
+
+            loading(
+                true,
+                "Testando canais",
+                `(${index}/${channels.length}) Canal: ${channel["name"]}`
+            )
 
             index += 1
         }
@@ -158,16 +159,15 @@ async function testChannels2(channels) {
         saved_channels[selected_country] = working_channels
 
         localStorage.setItem('working_channels', JSON.stringify(saved_channels))
-        return saved_channels[selected_country]
-    } else {
-        let new_list = []
-        channels.forEach(channel => {
-            if (saved_channels[selected_country].includes(channel["id"]))
-                new_list.push(channel)
-        })
-
-        return new_list
     }
+
+    let new_list = []
+    channels.forEach(channel => {
+        if (saved_channels[selected_country].includes(channel["id"]))
+            new_list.push(channel)
+    })
+
+    return new_list
 }
 
 function loadCategories(categories) {
