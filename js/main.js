@@ -49,6 +49,7 @@ selected_country = localStorage.getItem("selected_country")
 if (selected_country === null) {
     selected_country = "BR"
     localStorage.setItem("selected_country", selected_country)
+    document.getElementById("pais_nome").sette
 }
 
 fetchData(selected_country).then(r => {
@@ -116,6 +117,11 @@ function loadCountries(regions, countries) {
                     </div>
                     `
                 }
+
+                if (country["code"] === selected_country)
+                    document.getElementById("pais_nome").innerHTML = `
+                    ${country["flag"]} ${country["name"].toUpperCase()}
+                    `
             })
         }
     })
