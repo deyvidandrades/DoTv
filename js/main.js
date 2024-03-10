@@ -63,22 +63,51 @@ function loading(is_loading, titulo = "CARREGANDO INFORMAÇÕES", info = "") {
 }
 
 function init(regions, countries, categories, channels, streams) {
+    loadRegions()
     loadCountries(regions, countries)
     loadChannels2(channels, streams)
 }
 
+function loadRegions() {
+    let regions = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania']
+
+    let lista_regions = document.getElementById("tab-regions")
+    let conteudo_regions = document.getElementById("tabContent-regions")
+
+    lista_regions.innerHTML = ""
+    conteudo_regions.innerHTML = ""
+
+    regions.forEach((region, i) => {
+        let lista_regions_html = `
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-5 ${i === 0 ? "active" : ""}" id="tab-${region}" data-bs-toggle="pill"
+                    data-bs-target="#${region}" type="button" role="tab" aria-controls="${region}"
+                    aria-selected="true">
+                    ${region.toUpperCase()}
+                </button>
+            </li>
+        `
+        lista_regions.innerHTML += lista_regions_html
+    })
+
+    regions.forEach((region, i) => {
+        let lista_conteudo_categorias_html = `
+            <div class="tab-pane fade ${i === 0 ? "show active" : ""}" id="${region}" role="tabpanel"
+                aria-labelledby="${region}-tab" tabindex="${i}">
+                <div class="row row-fluid" id="lista-paises-${region}"></div>
+            </div>`
+
+        conteudo_regions.innerHTML += lista_conteudo_categorias_html
+    })
+}
+
 function loadCountries(regions, countries) {
-    let lista_paises = document.getElementById("lista_paises")
-
-    lista_paises.innerHTML = ""
-    regions.forEach((region) => {
-
-        if (['Africa', 'Asia', 'Americas', 'Europe', 'Oceania'].includes(region["name"])) {
-            let lista_paises_html = `<div class="mt-5"><p class="lead">${region["name"]}</p><div class="row row-fluid">`
-
-            countries.forEach((country) => {
+    regions.forEach(region => {
+        if (['Africa', 'Americas', 'Asia', 'Europe', 'Oceania'].includes(region["name"])) {
+            countries.forEach(country => {
+                let conteudo_country = document.getElementById(`lista-paises-${region["name"]}`)
                 if (region["countries"].includes(country["code"])) {
-                    lista_paises_html += `
+                    conteudo_country.innerHTML += `
                     <div class="col-6 col-md-4 col-lg-2 p-1 p-md-2">
                     <div class="btn btn-light p-3 text-start w-100 h-100" onclick="changeCountry('${country["code"]}')">
                     <h4 class="my-auto me-2">${country["flag"]}</h4>
@@ -87,14 +116,7 @@ function loadCountries(regions, countries) {
                     </div>
                     `
                 }
-
-                if (country["code"] === selected_country)
-                    document.getElementById("pais_nome").innerText = `
-                    ${country["flag"]} ${country["name"]}
-                    `
             })
-
-            lista_paises.innerHTML += `${lista_paises_html}</div></div>`
         }
     })
 }
