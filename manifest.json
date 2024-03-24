@@ -8,6 +8,11 @@
             "sizes": "1432x727"
         },
         {
+            "src": "/dotv_banner2.png",
+            "type": "image/png",
+            "sizes": "1920x1080"
+        },
+        {
             "src": "/favicon.svg",
             "type": "image/svg",
             "sizes": "512x512"
@@ -17,5 +22,5 @@
     "background_color": "#060307",
     "display": "standalone",
     "theme_color": "#773e84",
-    "description": "Tente acertar o nome!"
+    "description": "Um site de TV online gratuito e de código aberto!"
 }
