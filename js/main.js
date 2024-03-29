@@ -254,7 +254,7 @@ async function testarCanais(canais){
         if(!canais_salvos[pais_selecionado_id].includes(item["id"]))
             canais_nao_analisados.push(item)
         else
-            canais_funcionando.push(item)
+            canais_funcionando.push(item["id"])
     })
 
     for (const channel of canais_nao_analisados) {
@@ -278,9 +278,10 @@ async function testarCanais(canais){
     video_player.reset()
     video_player.pause()
     
-    canais_funcionando.forEach(canal => {
-        if(!canais_salvos[pais_selecionado_id].includes(canal))
-            canais_salvos[pais_selecionado_id].push(canal)
+    canais_funcionando.forEach(canal_id => {
+        console.log(canal_id)
+        if(!canais_salvos[pais_selecionado_id].includes(canal_id))
+            canais_salvos[pais_selecionado_id].push(canal_id)
     })
 
     localStorage.setItem('working_channels', JSON.stringify(canais_salvos))
