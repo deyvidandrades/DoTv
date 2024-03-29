@@ -107,17 +107,17 @@ function carregarPaises(regions, countries) {
                     <div class="col-6 col-md-4 col-lg-2 p-1 p-md-2">
                     <div class="btn btn-light p-3 text-start w-100 h-100" onclick="mudarPais('${country["code"]}')">
                     <h4 class="my-auto me-2">${country["flag"]}</h4>
-
+                    <p class="my-auto">${country["name"]}</hp>
                     </div>
                     </div>
                     `
                 }
-                //<p class="my-auto">${country["name"]}</hp>
 
                 if (country["code"] === pais_selecionado_id)
                     document.getElementById("pais_nome").innerHTML = `
-                    ${country["flag"]} ${country["name"].toUpperCase()}
+                    ${country["flag"]}
                     `
+                //${country["name"].toUpperCase()}
             })
         }
     })
