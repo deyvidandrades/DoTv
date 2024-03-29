@@ -141,7 +141,7 @@ function carregarCategorias(categories) {
 
     categorias.forEach((category, i) => {
         let lista_categorias_html = `
-            <li class="nav-item" role="presentation">
+            <li class="nav-item col" role="presentation">
                 <button class="nav-link rounded-5 ${i === 0 ? "active" : ""}" id="tab-${category}" data-bs-toggle="pill"
                     data-bs-target="#${category}" type="button" role="tab" aria-controls="${category}"
                     aria-selected="true" onClick=testarCanaisCategoria("${category}")>
@@ -192,13 +192,39 @@ function filtrarCanais(channels, streams) {
                         "name": channel["name"],
                         "logo": channel["logo"],
                         "country": channel["country"],
-                        "categories": channel["categories"].length === 0 ? ["general"] : channel["categories"],
+                        "categories": channel["categories"].length === 0 ? ["outros"] : channel["categories"],
                         "url": stream["url"]
                     })
                 }
             })
         }
     })
+
+    filtered_channels.forEach(item => {
+        if(["sports", "auto"].includes(item["categories"][0]))
+            item["categories"] = ["esportes"]
+        else if (["entertainment", "comedy", "music"].includes(item["categories"][0]))
+            item["categories"] = ["entretenimento"]
+        else if (["movies", "documentary", "series", "classic"].includes(item["categories"][0]))
+            item["categories"] = ["filmes"]
+        else if (["animation", "kids"].includes(item["categories"][0]))
+            item["categories"] = ["desenhos"]
+        else if (["news", "legislative", "weather"].includes(item["categories"][0]))
+            item["categories"] = ["noticias"]
+        else if (["education", "science", "culture"].includes(item["categories"][0]))
+            item["categories"] = ["educacao"]
+        else if (["business", "shop"].includes(item["categories"][0]))
+            item["categories"] = ["negocios"]
+        else if (["family", "relax", "cooking"].includes(item["categories"][0]))
+            item["categories"] = ["familia"]
+        else if (["lifestyle", "travel", "outdoor"].includes(item["categories"][0]))
+            item["categories"] = ["lifestyle"]
+        else if (["general", "religious"].includes(item["categories"][0]))
+            item["categories"] = ["geral"]
+        else
+            item["categories"] = ["outros"]
+    })
+
     return filtered_channels
 }
 
@@ -223,7 +249,15 @@ async function testarCanais(canais){
 
     loading(true, "Testando canais", ``)
     
-    for (const channel of canais) {
+    let canais_nao_analisados = []
+    canais.forEach(item => {
+        if(!canais_salvos[pais_selecionado_id].includes(item["id"]))
+            canais_nao_analisados.push(item)
+        else
+            canais_funcionando.push(item)
+    })
+
+    for (const channel of canais_nao_analisados) {
         if(!canais_salvos[pais_selecionado_id].includes(channel["id"])){
             await verificarVideoSource(channel["url"]).then(is_working => {
                 canais_funcionando.push(channel["id"])
@@ -236,7 +270,7 @@ async function testarCanais(canais){
         loading(
             true,
             `Testando canais (${channel["categories"]})`,
-            `(${index}/${canais.length}) Canal: ${channel["name"]}`
+            `(${index}/${canais_nao_analisados.length}) Canal: ${channel["name"]}`
         )
         
         index += 1
