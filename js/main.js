@@ -241,6 +241,7 @@ async function testarCanais(canais){
         index += 1
     }
     video_player.reset()
+    video_player.pause()
     
     canais_funcionando.forEach(canal => {
         if(!canais_salvos[pais_selecionado_id].includes(canal))
