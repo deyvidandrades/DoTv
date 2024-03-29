@@ -352,7 +352,7 @@ function verificarVideoSource(url) {
 
             video_player.pause()
             reject(true)
-        }, 6000)
+        }, 5000)
 
         const loadedMetadataHandler = () => {
             clearTimeout(loadTimeout)
