@@ -98,9 +98,16 @@ function carregarRegioes() {
 }
 
 function carregarPaises(regions, countries) {
+    let historico_paises = localStorage.getItem("historico_paises")
+    let historico_paises_ids = []
+
+    if (historico_paises === null)
+        historico_paises = [pais_selecionado_id]
+
     regions.forEach(region => {
         if (['Africa', 'Americas', 'Asia', 'Europe', 'Oceania'].includes(region["name"])) {
             countries.forEach(country => {
+
                 let conteudo_country = document.getElementById(`lista-paises-${region["name"]}`)
                 if (region["countries"].includes(country["code"])) {
                     conteudo_country.innerHTML += `
@@ -111,6 +118,19 @@ function carregarPaises(regions, countries) {
                     </div>
                     </div>
                     `
+                }
+
+                let lista_historico = document.getElementById(`lista-historico`)
+                if(historico_paises.includes(country["code"]) && ! historico_paises_ids.includes(country["code"])){
+                    lista_historico.innerHTML += `
+                    <div class="col-6 col-md-4 col-lg-2 p-1 p-md-2">
+                    <div class="btn btn-light p-3 text-start w-100 h-100" onclick="mudarPais('${country["code"]}')">
+                    <h4 class="my-auto me-2">${country["flag"]}</h4>
+                    <p class="my-auto">${country["name"]}</hp>
+                    </div>
+                    </div>
+                    `
+                    historico_paises_ids.push(country["code"])
                 }
 
                 if (country["code"] === pais_selecionado_id)
@@ -315,9 +335,20 @@ function testarCanaisCategoria(categoria) {
 }
 
 function mudarPais(country_id) {
+    let historico_paises =  JSON.parse(localStorage.getItem("historico_paises"))
+
+    if (historico_paises === null) {
+        historico_paises = []
+    }
+    console.log(historico_paises)
+    historico_paises.push(country_id)
+    localStorage.setItem("historico_paises", JSON.stringify(historico_paises))
+
     pais_selecionado_id = country_id
     localStorage.setItem("selected_country", pais_selecionado_id)
-    fetchData(country_id).then()
+
+    //fetchData(country_id).then()
+    location.reload()
 }
 
 function mudarCanal(channel_id) {
